@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Inversa tu código de proceso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #resultado {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      display: none;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Inversa tu código de proceso</h1>
+
+  <input type="text" id="codigo" placeholder="Ingresa tu código de proceso">
+  <button onclick="buscarCodigo()">Buscar</button>
+
+  <div id="resultado">
+    <h2>Información del Cliente</h2>
+    <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+    <p><strong>Código de proceso:</strong> <span id="codigoResultado"></span></p>
+    <p><strong>Estado:</strong> <span id="estado"></span></p>
+  </div>
+
+  <script>
+    async function buscarCodigo() {
+      const codigoIngresado = document.getElementById("codigo").value.trim();
+      const resultadoDiv = document.getElementById("resultado");
+      const nombreSpan = document.getElementById("nombre");
+      const codigoSpan = document.getElementById("codigoResultado");
+      const estadoSpan = document.getElementById("estado");
+
+      // Reemplaza esta URL con la tuya desde Sheet.best o Google Sheets API
+      const sheetURL = 'https://sheet.best/api/sheets/tu-sheet-id';
+
+      const response = await fetch(sheetURL);
+      const data = await response.json();
+
+      const resultado = data.find(item => item.codigo === codigoIngresado);
+
+      if (resultado) {
+        nombreSpan.textContent = resultado.nombre;
+        codigoSpan.textContent = resultado.codigo;
+        estadoSpan.textContent = resultado.estado;
+        resultadoDiv.style.display = 'block';
+      } else {
+        resultadoDiv.style.display = 'block';
+        nombreSpan.textContent = 'No encontrado';
+        codigoSpan.textContent = '-';
+        estadoSpan.textContent = '-';
+      }
+    }
+  </script>
+</body>
+</html>
