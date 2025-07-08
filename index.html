@@ -6,13 +6,19 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 60px;
+      margin: 0;
+      padding: 0;
       background-color: #f5f5f5;
     }
 
-    h1 {
-      color: #333;
+    header, section {
+      padding: 40px;
+      text-align: center;
+    }
+
+    header {
+      background-color: #0077cc;
+      color: white;
     }
 
     input[type="text"] {
@@ -39,36 +45,62 @@
       display: none;
       border: 1px solid #ccc;
       border-radius: 8px;
-      width: 50%;
+      width: 60%;
       margin-left: auto;
       margin-right: auto;
+      text-align: left;
+    }
+
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .campo {
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Inversa tu código de proceso</h1>
+  <header>
+    <h1>Inversa tu código de proceso</h1>
+    <p>Consulta en línea el estado actual de tu proyecto</p>
+    <input type="text" id="codigo" placeholder="Ingresa tu código de proceso">
+    <button onclick="buscarCodigo()">Buscar</button>
 
-  <input type="text" id="codigo" placeholder="Ingresa tu código de proceso">
-  <button onclick="buscarCodigo()">Buscar</button>
+    <div id="resultado">
+      <h2>Información del Cliente</h2>
+      <div class="campo"><strong>Nombre:</strong> <span id="nombre"></span></div>
+      <div class="campo"><strong>ID:</strong> <span id="id"></span></div>
+      <div class="campo"><strong>Dirección:</strong> <span id="direccion"></span></div>
+      <div class="campo"><strong>Código de proceso:</strong> <span id="codigoResultado"></span></div>
+      <div class="campo"><strong>Estado:</strong> <span id="estado"></span></div>
+      <div class="campo"><strong>Proceso:</strong> <span id="proceso"></span></div>
+      <div class="campo"><strong>Pagos:</strong> <span id="pagos"></span></div>
+    </div>
+  </header>
 
-  <div id="resultado">
-    <h2>Información del Cliente</h2>
-    <p><strong>Nombre:</strong> <span id="nombre"></span></p>
-    <p><strong>Código de proceso:</strong> <span id="codigoResultado"></span></p>
-    <p><strong>Estado:</strong> <span id="estado"></span></p>
-  </div>
+  <footer>
+    &copy; 2025 Tu Empresa. Todos los derechos reservados.
+  </footer>
 
   <script>
     async function buscarCodigo() {
       const codigoIngresado = document.getElementById("codigo").value.trim();
       const resultadoDiv = document.getElementById("resultado");
+
       const nombreSpan = document.getElementById("nombre");
+      const idSpan = document.getElementById("id");
+      const direccionSpan = document.getElementById("direccion");
       const codigoSpan = document.getElementById("codigoResultado");
       const estadoSpan = document.getElementById("estado");
+      const procesoSpan = document.getElementById("proceso");
+      const pagosSpan = document.getElementById("pagos");
 
-      // Reemplaza esta URL con la tuya desde Sheet.best o Google Sheets API
-      const sheetURL = 'https://api.sheetbest.com/sheets/4f4bc6d7-4659-4353-bd1e-fd5b4a6aa70f';
+      const sheetURL = 'https://sheet.best/api/sheets/tu-sheet-id'; // REEMPLAZA AQUÍ
 
       const response = await fetch(sheetURL);
       const data = await response.json();
@@ -76,17 +108,26 @@
       const resultado = data.find(item => item.codigo === codigoIngresado);
 
       if (resultado) {
-        nombreSpan.textContent = resultado.nombre;
-        codigoSpan.textContent = resultado.codigo;
-        estadoSpan.textContent = resultado.estado;
+        nombreSpan.textContent = resultado.nombre || "-";
+        idSpan.textContent = resultado.id || "-";
+        direccionSpan.textContent = resultado.direccion || "-";
+        codigoSpan.textContent = resultado.codigo || "-";
+        estadoSpan.textContent = resultado.estado || "-";
+        procesoSpan.textContent = resultado.proceso || "-";
+        pagosSpan.textContent = resultado.pagos || "-";
         resultadoDiv.style.display = 'block';
       } else {
-        resultadoDiv.style.display = 'block';
         nombreSpan.textContent = 'No encontrado';
+        idSpan.textContent = '-';
+        direccionSpan.textContent = '-';
         codigoSpan.textContent = '-';
         estadoSpan.textContent = '-';
+        procesoSpan.textContent = '-';
+        pagosSpan.textContent = '-';
+        resultadoDiv.style.display = 'block';
       }
     }
   </script>
+
 </body>
 </html>
